@@ -1,0 +1,39 @@
+//Design Code
+module mux2x1(output out,input sel,in0,in1);
+  wire sel_i;
+  wire a,b;
+  nand g1(sel_i,sel,sel);
+  nand g2(a,sel_i,in0);
+  nand g3(b,sel,in1);
+  nand g4(out,a,b);
+endmodule
+
+//Test Bench Code
+module tb();
+  wire out;
+  reg sel,in0,in1;
+  mux2x1 DUT(out,sel,in0,in1);
+  integer i;
+  
+  initial
+    begin
+      for(i=0;i<8;i=i+1)
+        begin
+          {sel,in0,in1}=i;
+          #10;
+        end
+    end
+  
+  initial
+    begin
+      $timeformat(-9,0,"ns",10);
+      $monitor("time=%0t,sel=%b,in0=%b,in1=%b,out=%b",$time,sel,in0,in1,out);
+    end
+  
+  initial
+    begin
+      $dumpfile("test.vcd");
+      $dumpvars(1);
+    end
+  
+endmodule
